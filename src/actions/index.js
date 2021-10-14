@@ -12,6 +12,6 @@ export const fetchUsers = () => {
   return async (dispatch) => {
     const response = await jsonPlaceHolder.get("/users");
 
-    dispatch({ type: "FETCH_USER", payload: response });
+    dispatch({ type: "FETCH_USERS", payload: response.data });
   };
 };
