@@ -4,8 +4,14 @@ import _ from "lodash";
 export const fetchPostsAndUsers = () => async (dispatch, getState) => {
   //this is an action that can call the other actions we are combining them and only using this action in our componenets, doing so allows us to only fetch users once beacuse we are passing the user ids along with the posts
   await dispatch(fetchPosts());
-  const userIds = _.uniq(_.map(getState().posts, "userId")); //lodash _.uniq and _.map map returns us an array of the userids from the posts uniq removes duplicates
-  userIds.forEach((id) => dispatch(fetchUser(id))); //looping thru array of unique user ids and dispatching a fetch request for each id (1-10 here)
+  // const userIds = _.uniq(_.map(getState().posts, "userId")); //lodash _.uniq and _.map map returns us an array of the userids from the posts uniq removes duplicates
+  // userIds.forEach((id) => dispatch(fetchUser(id))); //looping thru array of unique user ids and dispatching a fetch request for each id (1-10 here)
+
+  _.chain(getState().posts)
+    .map("userId")
+    .uniq()
+    .forEach((id) => dispatch(fetchUser(id))) //<------- this is a refactored version of the commented out lines above using lodashes chain function
+    .value();
 };
 
 export const fetchPosts = () => {
